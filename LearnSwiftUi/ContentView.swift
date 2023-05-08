@@ -7,42 +7,73 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    @State private var text: String = "Ozma"
-    @State private var color: Color = .green
-    var body: some View {
-        StatusControl(text: $text, color: $color)
-        
-        VStack {
-            Text(text)
-                .font(.title)
-                
-        }
-        .frame(width: 100, height: 100)
-        .background(color)
-        .cornerRadius(10)
-        
-    }
+enum Mood: String {
+  case happy = "😀"
+  case sad = "☹️"
+  case upsidedown = "🙃"
+  case cat = "🐱"
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+struct ContentView: View {
+  @State private var name: String = ""
+  @State private var favoriteColor: Color = .green
+  @State private var mood: Mood = .happy
+  
+  var body: some View {
+    VStack {
+      StatusControl(name: $name, favoriteColor: $favoriteColor, mood: $mood)
+        .padding()
+      
+      StatusIcon(name: name, favoriteColor: favoriteColor, mood: mood)
+        .padding()
     }
+  }
 }
 
 struct StatusControl: View {
-    @Binding var text: String
-    @Binding var color: Color
-    var body: some View {
-        
-        VStack {
-            Text("Set your status:")
-            TextField("Set", text: $text)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            ColorPicker("Favourite Color", selection: $color)
-        }
-        .padding(.all, 22.0)
-        
+  @Binding var name: String
+  @Binding var favoriteColor: Color
+  @Binding var mood: Mood
+  
+  var body: some View {
+    VStack {
+      TextField("Name", text: $name)
+        .textFieldStyle(RoundedBorderTextFieldStyle())
+      
+      ColorPicker("Favorite Color", selection: $favoriteColor)
+      
+      Picker("Mood", selection: $mood) {
+        Text(Mood.happy.rawValue).tag(Mood.happy)
+        Text(Mood.sad.rawValue).tag(Mood.sad)
+        Text(Mood.upsidedown.rawValue).tag(Mood.upsidedown)
+        Text(Mood.cat.rawValue).tag(Mood.cat)
+      }
+      .pickerStyle(SegmentedPickerStyle())
     }
+  }
+}
+
+struct StatusIcon: View {
+  let name: String
+  let favoriteColor: Color
+  let mood: Mood
+  
+  var body: some View {
+    VStack {
+      Text(mood.rawValue)
+      Text(name)
+        .foregroundColor(.white)
+    }
+    .font(.largeTitle)
+    .padding()
+    .background(favoriteColor)
+    .cornerRadius(12)
+  }
+}
+
+
+struct ContentView_Previews: PreviewProvider {
+  static var previews: some View {
+    ContentView()
+  }
 }
