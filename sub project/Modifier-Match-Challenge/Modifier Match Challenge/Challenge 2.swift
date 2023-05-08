@@ -36,9 +36,17 @@ struct Challenge_2: View {
   var body: some View {
     VStack {
       Image(systemName: "sun.max.fill")
-        .renderingMode(.template)
+        .renderingMode(.original)
+        .resizable()
+        .frame(width: 50)
       
-      Text("Sunny")
+        Text("Sunny")
+            .fontWeight(.semibold)
+            .font(.title)
+            .foregroundColor(Color.white)
+        
+        Text("H: 61 L:44")
+        
     }
     .background(
       LinearGradient(
